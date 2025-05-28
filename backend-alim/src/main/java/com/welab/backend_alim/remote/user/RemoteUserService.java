@@ -1,18 +1,12 @@
 package com.welab.backend_alim.remote.user;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import com.welab.backend_alim.remote.user.dto.UserInfoDto;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@Service
-@RequiredArgsConstructor
-public class RemoteUserService {
-    private final RestTemplate restTemplate;
-
-    public String hello() {
-        return restTemplate.getForObject(
-                "http://backend-user/backend/user/v1/hello",
-                String.class
-        );
-    }
+@FeignClient(name = "backend-user", path = "/backend/user/v1")
+public interface RemoteUserService {
+    @PostMapping(value = "/info")
+    UserInfoDto.Response userInfo(@RequestBody UserInfoDto.Request request);
 }

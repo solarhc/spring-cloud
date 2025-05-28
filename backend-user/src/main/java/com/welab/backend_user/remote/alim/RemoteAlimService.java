@@ -1,18 +1,15 @@
 package com.welab.backend_user.remote.alim;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import com.welab.backend_user.remote.alim.dto.SendSmsDto;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
-@Service
-@RequiredArgsConstructor
-public class RemoteAlimService {
-    private final RestTemplate restTemplate;
+@FeignClient(name = "backend-alim", path = "/backend/alim/v1")
+public interface RemoteAlimService {
+    @GetMapping(value = "/hello")
+    String hello();
 
-    public String hello() {
-        return restTemplate.getForObject(
-                "http://backend-alim/backend/alim/v1/hello",
-                String.class
-        );
-    }
+    @PostMapping(value = "/sms")
+    SendSmsDto.Response sendSms(SendSmsDto.Request request);
 }

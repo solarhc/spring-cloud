@@ -1,10 +1,9 @@
 package com.welab.backend_user.api.backend;
 
+import com.welab.backend_user.domain.dto.UserInfoDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -13,5 +12,16 @@ public class BackendUserController {
     @GetMapping(value = "/hello")
     public String hello() {
         return "유저 백엔드 서비스가 호출되었습니다";
+    }
+
+    @PostMapping(value = "/info")
+    public UserInfoDto.Response userInfo(@RequestBody UserInfoDto.Request request) {
+        UserInfoDto.Response response = new UserInfoDto.Response();
+
+        response.setUserId(request.getUserId());
+        response.setUserName("개발자");
+        response.setPhoneNumber("010-0000-0000");
+
+        return response;
     }
 }

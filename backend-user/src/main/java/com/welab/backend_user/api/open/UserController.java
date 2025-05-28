@@ -1,12 +1,11 @@
 package com.welab.backend_user.api.open;
 
 import com.welab.backend_user.remote.alim.RemoteAlimService;
+import com.welab.backend_user.remote.alim.dto.SendSmsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -18,5 +17,11 @@ public class UserController {
     @GetMapping(value = "/test")
     public String test() {
         return remoteAlimService.hello();
+    }
+
+    @PostMapping(value = "/sms")
+    public SendSmsDto.Response sms(@RequestBody SendSmsDto.Request request) {
+        var response = remoteAlimService.sendSms(request);
+        return response;
     }
 }
