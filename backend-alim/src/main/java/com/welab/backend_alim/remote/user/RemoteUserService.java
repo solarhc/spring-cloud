@@ -1,4 +1,4 @@
-package com.welab.backend_user.remote.alim;
+package com.welab.backend_alim.remote.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,12 +6,12 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class RemoteAlimService {
+public class RemoteUserService {
     private final RestTemplate restTemplate;
 
     public String hello() {
         return restTemplate.getForObject(
-                "http://backend-alim/backend/alim/v1/hello",
+                "http://backend-user/backend/user/v1/hello",
                 String.class
         );
     }
