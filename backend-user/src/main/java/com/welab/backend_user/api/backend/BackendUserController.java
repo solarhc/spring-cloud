@@ -1,6 +1,7 @@
 package com.welab.backend_user.api.backend;
 
 import com.welab.backend_user.domain.dto.UserInfoDto;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,19 @@ public class BackendUserController {
         UserInfoDto.Response response = new UserInfoDto.Response();
 
         response.setUserId(request.getUserId());
+        response.setUserName("개발자");
+        response.setPhoneNumber("010-0000-0000");
+
+        return response;
+    }
+
+    @GetMapping(value = "/info")
+    public UserInfoDto.Response userInfo(@RequestParam("userId") String userId) {
+        log.info("userInfo: userId={}", userId);
+
+        UserInfoDto.Response response = new UserInfoDto.Response();
+
+        response.setUserId(userId);
         response.setUserName("개발자");
         response.setPhoneNumber("010-0000-0000");
 
