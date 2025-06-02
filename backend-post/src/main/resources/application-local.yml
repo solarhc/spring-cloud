@@ -1,0 +1,26 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:13307/post?serverTimezone=UTC&useSSL=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    username: user
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1 # HikariCP 유효성 검사 추가
+  jpa:
+    hibernate:
+      ddl-auto: create # 오직 테스트 환경에서만
+      generate-ddl: true # 오직 테스트 환경에서만
+      show-sql: true
+    open-in-view: false
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

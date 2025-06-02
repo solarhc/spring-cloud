@@ -2,6 +2,7 @@ package com.welab.backend_user.api.open;
 
 import com.welab.backend_user.common.dto.ApiResponseDto;
 import com.welab.backend_user.common.exception.NotFound;
+import com.welab.backend_user.common.web.context.GatewayRequestHeaderUtils;
 import com.welab.backend_user.remote.alim.RemoteAlimService;
 import com.welab.backend_user.remote.alim.dto.SendSmsDto;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,10 @@ public class UserController {
 
     @GetMapping(value = "/test")
     public ApiResponseDto<String> test() {
-        String result = remoteAlimService.hello();
-        return ApiResponseDto.createOk(result);
+//        String result = remoteAlimService.hello();
+        String userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+        log.error("userId = {}", userId);
+        return ApiResponseDto.createOk(userId);
     }
 
     @PostMapping(value = "/sms")
