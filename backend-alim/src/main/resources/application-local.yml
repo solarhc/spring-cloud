@@ -1,17 +1,9 @@
 server:
   port: 8082
 
-#spring:
-#  cloud:
-#    discovery:
-#      client:
-#        simple:
-#          instances: # 'my-backend-service'에 대한 인스턴스 정의
-#            user-service:
-#              - service-id: user-service-1
-#                uri: http://localhost:8081
-#              - service-id: user-service-2
-#                uri: http://localhost:8081
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
 
 eureka:
   instance:

@@ -3,10 +3,13 @@ package com.welab.backend_user.service;
 import com.welab.backend_user.common.exception.BadParameter;
 import com.welab.backend_user.common.exception.NotFound;
 import com.welab.backend_user.domain.SiteUser;
+import com.welab.backend_user.domain.dto.SiteUserInfoDto;
 import com.welab.backend_user.domain.dto.SiteUserLoginDto;
 import com.welab.backend_user.domain.dto.SiteUserRefreshDto;
 import com.welab.backend_user.domain.dto.SiteUserRegisterDto;
+import com.welab.backend_user.domain.event.SiteUserInfoEvent;
 import com.welab.backend_user.domain.repository.SiteUserRepository;
+import com.welab.backend_user.event.producer.KafkaMessageProducer;
 import com.welab.backend_user.remote.alim.RemoteAlimService;
 import com.welab.backend_user.remote.alim.dto.SendSmsDto;
 import com.welab.backend_user.secret.hash.SecureHashUtils;
@@ -23,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SiteUserService {
     private final SiteUserRepository siteUserRepository;
     private final TokenGenerator tokenGenerator;
-    private final RemoteAlimService remoteAlimService;
+    private final KafkaMessageProducer kafkaMessageProducer;
 
     @Transactional
     public void registerUser(SiteUserRegisterDto registerDto) {
@@ -31,9 +34,8 @@ public class SiteUserService {
 
         siteUserRepository.save(siteUser);
 
-        // 알림톡 전송 요청
-        SendSmsDto.Request request = SendSmsDto.Request.fromEntity(siteUser);
-        remoteAlimService.sendSms(request);
+        SiteUserInfoEvent event = SiteUserInfoEvent.fromEntity("Create", siteUser);
+        kafkaMessageProducer.send(SiteUserInfoEvent.Topic, event);
     }
 
     @Transactional(readOnly = true)
@@ -63,5 +65,15 @@ public class SiteUserService {
         }
 
         return tokenGenerator.generateAccessToken(userId, "WEB");
+    }
+
+    @Transactional(readOnly = true)
+    public SiteUserInfoDto userInfo(String userId) {
+        SiteUser user = siteUserRepository.findByUserId(userId);
+        if (user == null) {
+            throw new NotFound("사용자를 찾을 수 없습니다.");
+        }
+
+        return SiteUserInfoDto.fromEntity(user);
     }
 }

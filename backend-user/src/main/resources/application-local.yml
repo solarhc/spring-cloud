@@ -16,9 +16,8 @@ spring:
     generate-ddl: true # 오직 테스트 환경에서만 (spring.jpa.generate-ddl)
     show-sql: true
     open-in-view: false
-    # properties:
-    #   hibernate:
-    #     dialect: org.hibernate.dialect.MySQL8Dialect
+  kafka:
+    bootstrap-servers: localhost:9092
 
 #spring:
 #  cloud:
