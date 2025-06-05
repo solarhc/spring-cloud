@@ -18,6 +18,21 @@ spring:
     open-in-view: false
   kafka:
     bootstrap-servers: localhost:9092
+  cloud:
+    config:
+      enabled: false
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0 # 0.0 ~ 1.0 사이 값 (모든 요청을 트레이싱하려면1.0)
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId},%X{spanId}]" # 로그에 traceId, spanId 추가
 
 #spring:
 #  cloud:

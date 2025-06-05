@@ -17,6 +17,9 @@ spring:
     open-in-view: false
   kafka:
     bootstrap-servers: localhost:9092
+  cloud:
+    config:
+      enabled: false
 
 eureka:
   instance:

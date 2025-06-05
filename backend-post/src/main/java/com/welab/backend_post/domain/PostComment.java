@@ -48,6 +48,7 @@ public class PostComment {
 
     @ManyToOne(targetEntity = Post.class)
     @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = true)
+    @Getter
     @Setter
     private Post post;
 }

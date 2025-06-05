@@ -33,6 +33,20 @@ spring:
               - Path=/api/post/** # '/api/post/'로 시작하는 모든 경로의 요청이 이 라우트의 대상이 됩니다.
             filters:
               - addAuthenticationHeader
+    config:
+      enabled: false
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0 # 0.0 ~ 1.0 사이 값 (모든 요청을 트레이싱하려면1.0)
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId},%X{spanId}]" # 로그에 traceId, spanId 추가
 
 jwt:
   header: Authorization

@@ -2,6 +2,7 @@ package com.welab.backend_user.service;
 
 import com.welab.backend_user.common.exception.BadParameter;
 import com.welab.backend_user.common.exception.NotFound;
+import com.welab.backend_user.common.type.ActionAndId;
 import com.welab.backend_user.domain.SiteUser;
 import com.welab.backend_user.domain.dto.SiteUserInfoDto;
 import com.welab.backend_user.domain.dto.SiteUserLoginDto;
@@ -29,13 +30,25 @@ public class SiteUserService {
     private final KafkaMessageProducer kafkaMessageProducer;
 
     @Transactional
-    public void registerUser(SiteUserRegisterDto registerDto) {
+    public ActionAndId registerUserAndNotify(SiteUserRegisterDto registerDto) {
         SiteUser siteUser = registerDto.toEntity();
 
         siteUserRepository.save(siteUser);
 
-        SiteUserInfoEvent event = SiteUserInfoEvent.fromEntity("Create", siteUser);
-        kafkaMessageProducer.send(SiteUserInfoEvent.Topic, event);
+//        SiteUserInfoEvent event = SiteUserInfoEvent.fromEntity("Create", siteUser);
+//        kafkaMessageProducer.send(SiteUserInfoEvent.Topic, event);
+
+        return ActionAndId.of("Create", siteUser.getId());
+    }
+
+    @Transactional
+    public ActionAndId updateEmailAndNotify() {
+        return ActionAndId.of("Update", 0L);
+    }
+
+    @Transactional
+    public ActionAndId updateAddressAndNotify() {
+        return ActionAndId.of("Update", 0L);
     }
 
     @Transactional(readOnly = true)
